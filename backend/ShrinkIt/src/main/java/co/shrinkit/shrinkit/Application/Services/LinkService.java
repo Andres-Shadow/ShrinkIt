@@ -9,6 +9,7 @@ import co.shrinkit.shrinkit.Application.Adapters.LinkAdapter;
 import co.shrinkit.shrinkit.Application.Dto.ApiResponseDto;
 import co.shrinkit.shrinkit.Application.Dto.ApiResponseRetriveAllLinksDto;
 import co.shrinkit.shrinkit.Application.Dto.LinkDto;
+import co.shrinkit.shrinkit.Application.Dto.UpdateLinkDto;
 import co.shrinkit.shrinkit.Domain.Models.Link;
 import co.shrinkit.shrinkit.Domain.Ports.In.CreateShortLinkUseCase;
 import co.shrinkit.shrinkit.Domain.Ports.In.DeleteShortLinkUseCase;
@@ -114,6 +115,61 @@ public class LinkService implements CreateShortLinkUseCase, RetrieveShortLinkUse
         apiResponseDto.setData( links);
         apiResponseDto.setCount(countShortLinks());
         apiResponseDto.setMessage("Links found");
+
+        return apiResponseDto;
+    }
+
+    public ApiResponseDto<Link> updateLink(UpdateLinkDto updateLinkDto) {
+        // Obtain DTO variables
+        Long linkId = updateLinkDto.getLinkId();
+        String newAlias = updateLinkDto.getLinkAlias();
+
+        // Search the link with the ID provided
+        Optional<Link> optionalLink = retrieveShortLink(linkId);
+        ApiResponseDto<Link> apiResponseDto = new ApiResponseDto<>();
+
+        if (optionalLink.isEmpty()) {
+            // Return an error body
+            apiResponseDto.setStatus(404);
+            apiResponseDto.setMessage("Link not found");
+            apiResponseDto.setData(null);
+            return apiResponseDto;
+        }
+
+        // Update the alias and change the reference
+        Link linkToUpdate = optionalLink.get();
+        linkToUpdate.setLinkAlias(newAlias);
+        Link updatedLink = createShortLink(linkToUpdate);
+
+        // Returns a successful response
+        apiResponseDto.setStatus(200);
+        apiResponseDto.setMessage("Link updated");
+        apiResponseDto.setData(updatedLink);
+
+        return apiResponseDto;
+    }
+
+
+    public ApiResponseDto<Boolean> destroyShortLink(Long linkid){
+
+        // Search the link with the ID provided
+        Optional<Link> optionalLink = retrieveShortLink(linkid);
+        ApiResponseDto<Boolean> apiResponseDto = new ApiResponseDto<>();
+
+        if (optionalLink.isEmpty()) {
+            // Return an error body
+            apiResponseDto.setStatus(404);
+            apiResponseDto.setMessage("Link not found");
+            apiResponseDto.setData(false);
+            return apiResponseDto;
+        }
+
+        Boolean deleted = deleteShortLink(linkid);
+
+        // Returns a successful response
+        apiResponseDto.setStatus(200);
+        apiResponseDto.setMessage("Link deleted");
+        apiResponseDto.setData(deleted);
 
         return apiResponseDto;
     }
