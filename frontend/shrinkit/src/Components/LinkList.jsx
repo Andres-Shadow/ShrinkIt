@@ -92,54 +92,89 @@ function LinkList() {
   };
 
   return (
-    <div className="App">
-      <h1>Links</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+    <div className="p-8 space-y-8">
+      
+      {error && <p className="text-red-400">{error}</p>}
 
       <AddLinkForm onAddLink={handleAddLink} />
 
-      <table border="1">
+      <table className="w-full border-separate border-spacing-0">
         <thead>
-          <tr>
-            <th>ID</th>
-            <th>Original Link</th>
-            <th>Short Link</th>
-            <th>Alias</th>
-            <th>Creation Date</th>
-            <th>Expiration Date</th>
-            <th>Actions</th>
+          <tr className="bg-zinc-700">
+            <th className="py-3 text-center text-white border-r border-zinc-600 font-medium">
+              ID
+            </th>
+            <th className="py-3 text-center text-white border-r border-zinc-600 font-medium">
+              Original Link
+            </th>
+            <th className="py-3 text-center text-white border-r border-zinc-600 font-medium">
+              Short Link
+            </th>
+            <th className="py-3 text-center text-white border-r border-zinc-600 font-medium">
+              Alias
+            </th>
+            <th className="py-3 text-center text-white border-r border-zinc-600 font-medium">
+              Creation Date
+            </th>
+            <th className="py-3 text-center text-white border-r border-zinc-600 font-medium">
+              Expiration Date
+            </th>
+            <th className="py-3 text-center text-white font-medium">Actions</th>
           </tr>
         </thead>
         <tbody>
           {links.map((link) => (
-            <tr key={link.linkId}>
-              <td>{link.linkId}</td>
-              <td>{link.originalLink}</td>
-              <td>{link.shortLink}</td>
-              <td>
+            <tr
+              key={link.linkId}
+              className="border-b border-zinc-600 hover:bg-zinc-700/50"
+            >
+              <td className="py-3 px-4 text-center text-white border-r border-zinc-600">
+                {link.linkId}
+              </td>
+              <td className="py-3 px-4 text-center text-white border-r border-zinc-600">
+                {link.originalLink}
+              </td>
+              <td className="py-3 px-4 text-center text-white border-r border-zinc-600">
+                {link.shortLink}
+              </td>
+              <td className="py-3 px-4 text-center text-white border-r border-zinc-600">
                 {editLinkId === link.linkId ? (
                   <input
                     type="text"
                     value={newAlias}
                     onChange={(e) => setNewAlias(e.target.value)}
+                    className="bg-transparent border-b border-white/30 focus:border-white px-2 py-1 outline-none text-center text-white"
                   />
                 ) : (
                   link.linkAlias || "N/A"
                 )}
               </td>
-              <td>{new Date(link.creationDate).toLocaleDateString()}</td>
-              <td>{new Date(link.expirationDate).toLocaleDateString()}</td>
-              <td>
+              <td className="py-3 px-4 text-center text-white border-r border-zinc-600">
+                {new Date(link.creationDate).toLocaleDateString()}
+              </td>
+              <td className="py-3 px-4 text-center text-white border-r border-zinc-600">
+                {new Date(link.expirationDate).toLocaleDateString()}
+              </td>
+              <td className="py-3 px-4 text-center text-white flex justify-center gap-2">
                 {editLinkId === link.linkId ? (
-                  <button onClick={handleUpdateLink}>Save</button>
+                  <button
+                    onClick={handleUpdateLink}
+                    className="px-4 py-1.5 border border-white/30 rounded-full hover:bg-white/10 text-white transition-colors"
+                  >
+                    Save
+                  </button>
                 ) : (
                   <button
                     onClick={() => handleEditClick(link.linkId, link.linkAlias)}
+                    className="px-4 py-1.5 border border-white/30 rounded-full hover:bg-white/10 text-white transition-colors"
                   >
                     Edit
                   </button>
                 )}
-                <button onClick={() => handleDeleteLink(link.linkId)}>
+                <button
+                  onClick={() => handleDeleteLink(link.linkId)}
+                  className="px-4 py-1.5 border border-white/30 rounded-full hover:bg-white/10 text-white transition-colors"
+                >
                   Delete
                 </button>
               </td>
