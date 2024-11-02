@@ -5,7 +5,9 @@ import java.util.Optional;
 import co.shrinkit.shrinkit.Domain.Models.Link;
 import co.shrinkit.shrinkit.Domain.Ports.In.UpdateShortLinkUseCase;
 import co.shrinkit.shrinkit.Domain.Ports.Out.LinkRepositoryPort;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UpdateShortLInkUseCaseImpl implements UpdateShortLinkUseCase {
 
     private final LinkRepositoryPort linkRepository;

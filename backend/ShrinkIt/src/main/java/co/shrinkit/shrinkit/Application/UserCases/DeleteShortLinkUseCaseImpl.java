@@ -2,7 +2,9 @@ package co.shrinkit.shrinkit.Application.UserCases;
 
 import co.shrinkit.shrinkit.Domain.Ports.In.DeleteShortLinkUseCase;
 import co.shrinkit.shrinkit.Domain.Ports.Out.LinkRepositoryPort;
+import org.springframework.stereotype.Service;
 
+@Service
 public class DeleteShortLinkUseCaseImpl implements DeleteShortLinkUseCase {
 
     private final LinkRepositoryPort linkRepository;

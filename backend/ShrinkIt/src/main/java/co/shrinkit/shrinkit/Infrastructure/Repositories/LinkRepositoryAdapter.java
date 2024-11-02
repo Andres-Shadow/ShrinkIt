@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import co.shrinkit.shrinkit.Infrastructure.Entities.LinkEntity;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +16,7 @@ import co.shrinkit.shrinkit.Domain.Models.Link;
 import co.shrinkit.shrinkit.Domain.Ports.Out.LinkRepositoryPort;
 
 @Component
+@Primary
 @AllArgsConstructor
 public class LinkRepositoryAdapter implements LinkRepositoryPort{
 

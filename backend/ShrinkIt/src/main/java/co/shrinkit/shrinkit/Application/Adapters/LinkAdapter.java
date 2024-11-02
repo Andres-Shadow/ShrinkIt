@@ -2,9 +2,11 @@ package co.shrinkit.shrinkit.Application.Adapters;
 
 import co.shrinkit.shrinkit.Application.Dto.LinkDto;
 import co.shrinkit.shrinkit.Domain.Models.Link;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
+@Component
 public class LinkAdapter {
 
     public Link fromDTO(LinkDto dto) {
