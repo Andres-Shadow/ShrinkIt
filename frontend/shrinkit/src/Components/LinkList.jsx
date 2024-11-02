@@ -93,7 +93,6 @@ function LinkList() {
 
   return (
     <div className="p-8 space-y-8">
-      
       {error && <p className="text-red-400">{error}</p>}
 
       <AddLinkForm onAddLink={handleAddLink} />
@@ -135,7 +134,13 @@ function LinkList() {
                 {link.originalLink}
               </td>
               <td className="py-3 px-4 text-center text-white border-r border-zinc-600">
-                {link.shortLink}
+                <a
+                  href={link.shortLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {link.shortLink}
+                </a>
               </td>
               <td className="py-3 px-4 text-center text-white border-r border-zinc-600">
                 {editLinkId === link.linkId ? (
