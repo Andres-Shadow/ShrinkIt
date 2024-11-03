@@ -133,14 +133,11 @@ function LinkList() {
               <td className="py-3 px-4 text-center text-white border-r border-zinc-600">
                 {link.originalLink}
               </td>
-              <td className="py-3 px-4 text-center text-white border-r border-zinc-600">
-                <a
-                  href={link.shortLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {link.shortLink}
-                </a>
+              <td
+                className="py-3 px-4 text-center text-white border-r border-zinc-600 cursor-pointer"
+                onClick={() => navigator.clipboard.writeText(link.shortLink)}
+              >
+                {link.shortLink}
               </td>
               <td className="py-3 px-4 text-center text-white border-r border-zinc-600">
                 {editLinkId === link.linkId ? (
