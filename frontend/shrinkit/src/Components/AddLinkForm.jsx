@@ -24,11 +24,11 @@ function AddLinkForm({ onAddLink }) {
     e.preventDefault();
     if (alias && originalLink) {
       onAddLink({ alias, originalLink });
-      setNotification("Link agregado exitosamente");
+      setNotification("Link added successfully");
       setAlias("");
       setOriginalLink("");
     } else {
-      setNotification("Por favor completa todos los campos");
+      setNotification("Please fill all the fields");
     }
   };
 
@@ -53,7 +53,7 @@ function AddLinkForm({ onAddLink }) {
           }
           transition-opacity duration-300
           ${
-            notification.includes("exitosamente")
+            notification.includes("successfully")
               ? "bg-green-500"
               : "bg-red-500"
           }
@@ -73,7 +73,7 @@ function AddLinkForm({ onAddLink }) {
           <label className="text-white">Alias for the link:</label>
           <input
             type="text"
-            value={alias} 
+            value={alias}
             onChange={(e) => setAlias(e.target.value)}
             className="bg-transparent border-b border-white/30 focus:border-white px-2 py-1 outline-none text-white"
           />

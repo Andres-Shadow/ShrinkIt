@@ -10,8 +10,10 @@ import AddLinkForm from "./AddLinkForm";
 function LinkList() {
   const [links, setLinks] = useState([]);
   const [error, setError] = useState(null);
-  const [editLinkId, setEditLinkId] = useState(null); // ID of the link being edited
-  const [newAlias, setNewAlias] = useState(""); // New alias to update
+  const [editLinkId, setEditLinkId] = useState(null);
+  const [newAlias, setNewAlias] = useState("");
+  const [notification, setNotification] = useState(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     fetchLinks()
@@ -27,6 +29,20 @@ function LinkList() {
         console.error(error);
       });
   }, []);
+
+  useEffect(() => {
+    if (notification) {
+      setIsVisible(true);
+      const timer = setTimeout(() => {
+        setIsVisible(false);
+        setTimeout(() => {
+          setNotification(null);
+        }, 300);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [notification]);
 
   const handleAddLink = (newLink) => {
     addLink(newLink)
@@ -44,8 +60,8 @@ function LinkList() {
   };
 
   const handleEditClick = (linkId, currentAlias) => {
-    setEditLinkId(linkId); // Set the ID of the link to edit
-    setNewAlias(currentAlias || ""); // Initialize alias with current alias or empty
+    setEditLinkId(linkId);
+    setNewAlias(currentAlias || "");
   };
 
   const handleUpdateLink = () => {
@@ -64,7 +80,7 @@ function LinkList() {
                 : link
             )
           );
-          setEditLinkId(null); // End editing
+          setEditLinkId(null);
           setNewAlias("");
         } else {
           setError("Error updating the alias");
@@ -91,11 +107,35 @@ function LinkList() {
       });
   };
 
+  const handleCopyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setNotification("Copied to clipboard");
+    });
+  };
+
   return (
     <div className="p-8 space-y-8">
       {error && <p className="text-red-400">{error}</p>}
 
       <AddLinkForm onAddLink={handleAddLink} />
+
+      {notification && (
+        <div
+          className={`
+          fixed top-4 right-4
+          ${
+            isVisible
+              ? "animate-fade-in opacity-100"
+              : "animate-fade-out opacity-0"
+          }
+          transition-opacity duration-300
+          bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg
+          flex items-center gap-2
+        `}
+        >
+          <span className="text-sm font-medium">{notification}</span>
+        </div>
+      )}
 
       <table className="w-full border-separate border-spacing-0">
         <thead>
@@ -135,7 +175,7 @@ function LinkList() {
               </td>
               <td
                 className="py-3 px-4 text-center text-white border-r border-zinc-600 cursor-pointer"
-                onClick={() => navigator.clipboard.writeText(link.shortLink)}
+                onClick={() => handleCopyToClipboard(link.shortLink)}
               >
                 {link.shortLink}
               </td>
