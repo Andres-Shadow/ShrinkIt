@@ -1,12 +1,38 @@
 package co.shrinkit.shrinkit.Application.Utils;
 
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+@Component
 public class LinkShortenerUtils {
 
+    @Value("${app.link.prefix}")
+    private String prefix;
+
+    @Value("${app.link.server}")
+    private String serverAddress;
+
+    @Value("${server.port}")
+    private String serverPort;
+
+    public static String linkPrefix;
+    public static String linkServerAddress;
+    public static String linkServerPort;
+
+    @PostConstruct
+    public void init() {
+        linkPrefix = prefix;
+        linkServerAddress = serverAddress;
+        linkServerPort = serverPort;
+    }
+
     public static String generateShortUrl(Long linkId, String originalUrl) {
-        String urlPrefix = "localhost:8080/shrinkit.dev/";
+        String urlPrefix = linkServerAddress + ":" + linkServerPort + "/" + linkPrefix + "/";
+        System.out.println(urlPrefix);
         String encodeLink = encodeLinkId(linkId);
         String hashFragment = generateHashFragment(originalUrl);
         return urlPrefix + encodeLink + hashFragment;
