@@ -14,12 +14,17 @@ function LinkList() {
   const [newAlias, setNewAlias] = useState("");
   const [notification, setNotification] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
 
-  useEffect(() => {
-    fetchLinks()
+  const pageSize = 10;
+
+  const fetchLinksWithPagination = (page) => {
+    fetchLinks(page, pageSize)
       .then((data) => {
         if (data.status === 200) {
           setLinks(data.data);
+          setTotalPages(Math.ceil(data.count / pageSize));
         } else {
           setError("Error retrieving data");
         }
@@ -28,7 +33,11 @@ function LinkList() {
         setError("Connection error");
         console.error(error);
       });
-  }, []);
+  };
+
+  useEffect(() => {
+    fetchLinksWithPagination(currentPage);
+  }, [currentPage]);
 
   useEffect(() => {
     if (notification) {
@@ -113,29 +122,26 @@ function LinkList() {
     });
   };
 
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
   return (
     <div className="p-8 space-y-8">
-      {error && <p className="text-red-400">{error}</p>}
-
       <AddLinkForm onAddLink={handleAddLink} />
 
       {notification && (
         <div
-          className={`
-          fixed top-4 right-4
-          ${
+          className={`fixed top-4 right-4 ${
             isVisible
               ? "animate-fade-in opacity-100"
               : "animate-fade-out opacity-0"
-          }
-          transition-opacity duration-300
-          bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg
-          flex items-center gap-2
-        `}
+          } transition-opacity duration-300 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-2`}
         >
           <span className="text-sm font-medium">{notification}</span>
         </div>
       )}
+
       <div className="p-8 space-y-8 overflow-x-auto">
         <table className="w-full border-separate border-spacing-0">
           <thead>
@@ -193,7 +199,6 @@ function LinkList() {
                     link.linkAlias || "N/A"
                   )}
                 </td>
-
                 <td className="py-3 px-4 text-center text-white border-r border-zinc-600">
                   {new Date(link.creationDate).toLocaleDateString()}
                 </td>
@@ -229,6 +234,26 @@ function LinkList() {
             ))}
           </tbody>
         </table>
+
+        <div className="flex justify-center space-x-4 mt-4">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 0}
+            className="px-4 py-2 border border-white/30 rounded hover:bg-white/10 text-white transition-colors disabled:opacity-50"
+          >
+            Previous
+          </button>
+          <span className="text-white">{`Page ${
+            currentPage + 1
+          } of ${totalPages}`}</span>
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage + 1 === totalPages}
+            className="px-4 py-2 border border-white/30 rounded hover:bg-white/10 text-white transition-colors disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );
